@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>换一种拆法 · 飞行汽车陆空功能分配架构的技术可行性与商业前景</title>
+<meta name="description" content="以小鹏汇天「陆地航母」为例，分析飞行汽车分体式与一体式两种陆空功能分配架构的技术可行性、应用场景与市场可行性。数据截止 2026-11-22。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =====================================================================
+     首屏
+     ===================================================================== -->
+<header class="shell hero">
+  <span class="lbl">技术调研报告 / 低空经济 / 2026</span>
+  <h1>换一种拆法</h1>
+  <p class="sub">飞行汽车陆空功能分配架构的技术可行性与商业前景</p>
+  <p class="anchor">以小鹏汇天「陆地航母」为例</p>
+
+  <div class="abstract">
+    <span class="lbl">核心论点</span>
+    <p class="thesis" style="margin-top:var(--sp-3)">
+      分体式不是一种把车和飞机拆开的造型选择，而是<span class="hl">一次功能解耦的工程决策</span>。它用「两套系统的重量与成本冗余」，换取「两套法规的分别合规」和「两组性能指标的分别最优」。
+    </p>
+    <p class="thesis">
+      在当前的电池能量密度和适航法规状态下，这笔交易是划算的。<span class="hl">但它的划算是有条件的、暂时的。</span>
+    </p>
+    <p style="font-size:var(--step--1);color:var(--ink2);margin:var(--sp-3) 0 0">
+      本文的结论建立在一份一手监管文件上：民航局《关于就 X3-F 型航空器专用条件征求意见的函》写明，该飞行体仅限昼间目视飞行、主要用于私人娱乐飞行、<strong>不用于商业载客</strong>。这条限制决定了分体式当前的真实产品形态，也决定了本文对其商业前景的判断。
+    </p>
+  </div>
+
+  <p class="submission-author" style="margin-top:var(--sp-4);color:var(--ink2);font-size:var(--step--1)">课程作业 · 莫祖蕴 · 学号 15230103 · 152301班</p>
+
+  <div class="hero-meta">
+    <div><b>调研对象</b>飞行汽车陆空功能分配架构</div>
+    <div><b>实证载体</b>小鹏汇天 陆地航母 / X3-F</div>
+    <div><b>对照组</b>Alef · AirCar · 亿航 · Part 103</div>
+    <div><b>数据截止</b><span class="num">2026-11-22</span></div>
+  </div>
+</header>
+
+<!-- 目录 -->
+<div class="shell" style="padding-bottom:var(--sp-5)">
+  <nav class="toc" aria-label="目录">
+    <a href="#l00"><em>00</em><b>三段视频，哪个才配叫飞行汽车</b></a>
+    <a href="#l01"><em>01</em><b>定义层</b>　你以为的飞行汽车，其实是四样东西</a>
+    <a href="#l02"><em>02</em><b>主体层</b>　拆解「陆地航母」</a>
+    <a href="#l03"><em>03</em><b>约束层</b>　它为什么不敢做成一体</a>
+    <a href="#l04"><em>04</em><b>解法层</b>　分体式如何逐条绕开，以及代价</a>
+    <a href="#l05"><em>05</em><b>证据层</b>　谁真的走到哪了</a>
+    <a href="#l06"><em>06</em><b>场景层</b>　按场景反推形态</a>
+    <a href="#l07"><em>07</em><b>身份层</b>　那它凭什么还叫「飞行汽车」</a>
+    <a href="#l08"><em>08</em><b>判断层</b>　回答开场那个问题</a>
+    <a href="#l09"><em>09</em><b>局限与反方</b></a>
+  </nav>
+</div>
+
+<main>
+
+<!-- =====================================================================
+     00 开场
+     ===================================================================== -->
+<section class="layer shell" id="l00">
+  <span class="n">00 / 开场</span>
+  <div class="lead">
+    <h2>三段视频，哪个才配叫飞行汽车？</h2>
+    <p class="dek">三台机器，三条技术路线，三种截然不同的法律身份。它们在媒体上共用同一个名字。</p>
+  </div>
+
+  <div class="media3" id="media3"></div>
+
+  <div class="split" style="margin-top:var(--sp-5)">
+    <div>
+      <p class="drop">先不给答案。请注意第一段视频里那个被反复展示的动作：车停下、尾舱打开、一架飞行器自己升起来、分离、起飞。整个过程需要几分钟，而且需要一块足够开阔的空地。</p>
+      <p>把它和同期另外两台被叫做「飞行汽车」的机器放在一起对比，差异就出来了：Tesla 二代 Roadster 的腾空靠的是压缩空气喷射，不产生持续升力；Alef Model A 原地垂直升起越过车辆，靠的是旋翼。<strong>三台机器里，只有一台同时拥有合法路权和飞行能力</strong>——而它至今没有型号合格证。</p>
+      <p>这不是文字游戏。一台机器被归入哪个类别，决定了它要通过哪些审定、由谁驾驶、能不能收费载客、能不能上路。<span class="hl">而这些全都和它长得像不像一辆车无关。</span></p>
+      <p>本报告从这里出发，但不止步于分类。真正要回答的是一个工程问题：<strong>当「车」和「飞机」这两种功能必须共存时，把它们放进一个物体还是两个物体，这个选择背后的权衡机制是什么，以及这个权衡在什么条件下成立。</strong></p>
+    </div>
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd"><span class="lbl">看这三段视频时注意什么</span></div>
+        <div class="ctrl-bd" id="media-watch"></div>
+      </div>
+      <div class="ctrl" style="margin-top:var(--sp-4)">
+        <div class="ctrl-hd"><span class="lbl">本报告的论证结构</span></div>
+        <div class="ctrl-bd">
+          <ol class="pts" style="margin:0">
+            <li><em>01</em>否定你对「飞行汽车」的默认印象，建立坐标系</li>
+            <li><em>02</em>拆解分体式唯一走到量产工厂阶段的实物</li>
+            <li><em>03</em>量化四个硬约束，证明一体式当前做不出来</li>
+            <li><em>04</em>说明分体式如何逐条绕开，并诚实列出代价</li>
+            <li><em>05</em>用取证状态与跳票记录检验所有宣称</li>
+            <li><em>06</em>按场景反推形态，发现「车」的身份可能多余</li>
+            <li><em>07</em>翻转这个质疑：「车」指的从来不是轮子</li>
+            <li><em>08</em>分时间窗给判断，并列出证伪条件</li>
+          </ol>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =====================================================================
+     01 定义层
+     ===================================================================== -->
+<section class="layer shell" id="l01">
+  <span class="n">01 / 定义层</span>
+  <div class="lead">
+    <h2>你以为的飞行汽车，其实是四样东西</h2>
+    <p class="dek">「飞行汽车」这个词把两件本来独立的事焊在了一起：<strong>路权</strong>和<strong>汽车属性</strong>。把它们拆成两根轴，格局立刻清楚。</p>
+  </div>
+
+  <div class="split">
+    <div>
+      <p class="drop">横轴是<strong>路权</strong>：物理上能否在地面公路合法行驶。纵轴是<strong>汽车属性</strong>：是否私人拥有、普通人可操作、量产消费品、由汽车供应链造出来。</p>
+      <p>这两根轴从来不是同一件事，只是「飞行汽车」这个词让人以为它们必须同时成立。拆开之后会看到四个象限各自住着完全不同的产品，而最值得注意的两个点都在对角线上。</p>
+
+      <figure class="fig" style="margin-top:var(--sp-4)">
+        <span class="tag">FIG 01</span>
+        <div id="fig01"></div>
+        <figcaption>
+          <span><b>FIG-01</b> 路权 × 汽车属性 二维谱系</span>
+          <span>点击任一点查看判定依据</span>
+        </figcaption>
+      </figure>
+
+      <div id="q-detail"></div>
+
+      <h3 style="margin-top:var(--sp-5)">读图的三个发现</h3>
+      <ol class="pts">
+        <li><em>01</em><span><strong>右上角几乎是空的。</strong>既有真实路权又有汽车属性的产品，是「飞行汽车」四个字唯一名实相符的情况。Alef Model A 最接近，但它持有的是实验类特殊适航证，没有型号合格证，设计未获批准面向一般销售使用。</span></li>
+        <li><em>02</em><span><strong>左上角有东西，而且它完全不能上路。</strong>Pivotal Helix 和 Jetson ONE 没有任何路权，却在拥有与使用方式上最像汽车：个人购买、个人驾驶、十几万至二十余万美元、美国 Part 103 超轻型类别下无需飞行驾照。这是「不能上路的汽车」。</span></li>
+        <li><em>03</em><span><strong>分体式把两根轴拆到了两个物体上。</strong>陆行体在右上角（路权完整、汽车属性最高），飞行体在左上偏中（会飞、但不上路，且需单独的航空器驾驶资质）。<span class="hl">全图汽车属性最高的那个点，根本不飞。</span></span></li>
+      </ol>
+    </div>
+
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd">
+          <span class="lbl">坐标系外</span>
+          <span class="st st-warn">不在定义域内</span>
+        </div>
+        <div class="ctrl-bd" id="outlier"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 真实照片对照组：三种形态并置 -->
+  <h3 style="margin-top:var(--sp-6)">三种形态的实物对照</h3>
+  <p style="max-width:var(--measure)">把三张实物照片放在一起，分类问题会变得非常直观。请注意它们各自<strong>有没有路用车轮、车灯、保险杠</strong>——这三样东西是车辆法规的产物，也是判断一台机器要不要走车规认证的最直接外部特征。</p>
+  <div id="photos01" style="margin-top:var(--sp-4)"></div>
+
+  <!-- Roadster 机理图：论证图，保留 -->
+  <figure class="fig" style="margin-top:var(--sp-5)">
+    <span class="tag">FIG 02</span>
+    <div id="fig02"></div>
+    <figcaption>
+      <span><b>FIG-02</b> Tesla Roadster SpaceX 套件机理：冷气推进 + 风扇负压吸附</span>
+      <span>两套机构均不产生持续升力</span>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- =====================================================================
+     02 主体层
+     ===================================================================== -->
+<section class="layer shell" id="l02">
+  <span class="n">02 / 主体层</span>
+  <div class="lead">
+    <h2>拆解「陆地航母」</h2>
+    <p class="dek">分体式目前唯一走到万台级量产工厂阶段的实物。先把它完整拆开，后面所有分析都以它为实证载体。</p>
+  </div>
+
+  <div class="split">
+    <div>
+      <p class="drop">这其实是两个产品：一台可上路的增程式陆行体，和一架可收进其尾舱的纯电多旋翼飞行体 X3-F。平时飞行体折叠收纳，需要飞行时自动分离起飞。</p>
+      <p>这个产品的命名本身就值得注意。它不叫 eVTOL，不叫飞行器，叫<strong>「航母」</strong>——一个强调「母体搭载与投送」的军事隐喻。这个隐喻比「飞行汽车」四个字更准确地描述了它的功能分配：<span class="hl">车不是会飞的主体，车是让飞变得可行的那套配套。</span></p>
+
+      <figure class="fig" style="margin-top:var(--sp-4)">
+        <span class="tag">FIG 03</span>
+        <div id="fig03"></div>
+        <figcaption>
+          <span><b>FIG-03</b> X3-F 展开 / 折叠双态尺寸对照</span>
+          <span>折叠后可完全收入陆行体尾舱</span>
+        </figcaption>
+      </figure>
+
+      <div class="grid g2" style="margin-top:var(--sp-5)">
+        <div id="sys-ground"></div>
+        <div id="sys-air"></div>
+      </div>
+
+      <!-- 本节最关键的一手事实 -->
+      <div id="envelope" style="margin-top:var(--sp-5)"></div>
+
+      <h3 style="margin-top:var(--sp-5)">适航与产能进度</h3>
+      <p>适航取证是规模化交付的前提，而这正是当前最大的不确定项。</p>
+      <div class="grid g2" style="margin-top:var(--sp-3)">
+        <div id="cert-box"></div>
+        <div id="factory-box"></div>
+      </div>
+
+      <h3 style="margin-top:var(--sp-5)">海外布局</h3>
+      <div id="overseas"></div>
+    </div>
+
+    <aside class="side">
+      <div id="photo-ehang"></div>
+      <p style="font-size:var(--step--1);color:var(--ink2);margin:var(--sp-2) 0 0">
+        X3-F 飞行体与这台机器属于同一技术类别——多旋翼纯电载人航空器，没有路用车轮、车灯或保险杠。
+        区别只在于 X3-F 可折叠收进一台车的尾舱，而它不能。
+      </p>
+
+      <div class="ctrl" style="margin-top:var(--sp-4)">
+        <div class="ctrl-hd"><span class="lbl">商业数据</span></div>
+        <div class="ctrl-bd" id="commercial"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =====================================================================
+     03 约束层
+     ===================================================================== -->
+<section class="layer shell" id="l03">
+  <span class="n">03 / 约束层</span>
+  <div class="lead">
+    <h2>它为什么不敢做成一体？</h2>
+    <p class="dek">四个硬约束。它们不是「难点」，而是互相耦合的物理与制度边界。本节是全文的技术核心。</p>
+  </div>
+
+  <div id="constraints"></div>
+
+  <!-- 重量螺旋计算器 -->
+  <div style="margin-top:var(--sp-6)">
+    <h3>重量螺旋：自己拖一遍，看方程什么时候不成立</h3>
+    <p style="max-width:var(--measure)">四个约束里最根本的是重量，因为它会自我放大：要加航程就得加电池，加电池就加重量，加重量又要加结构和升力，于是还要再加电池。这个闭环叫<strong>重量螺旋</strong>。它有两种结局——收敛到一个有限值，或者发散。<span class="hl">发散意味着这个设计在物理上不存在。</span></p>
+
+    <div class="split" style="margin-top:var(--sp-4)">
+      <div>
+        <figure class="fig" style="margin:0">
+          <span class="tag">FIG 04</span>
+          <div class="ctrl-hd" style="border-bottom:1px solid var(--line)">
+            <span class="lbl">质量分数法闭合模型</span>
+            <span class="lbl" id="cfg-note"></span>
+          </div>
+          <div class="ctrl-bd">
+            <div class="seg" id="cfg-seg" style="margin-bottom:var(--sp-4)"></div>
+            <div id="sliders"></div>
+          </div>
+          <figcaption>
+            <span><b>FIG-04</b> 重量螺旋交互计算器</span>
+            <span>MTOW = 载荷 / (1 − a)</span>
+          </figcaption>
+        </figure>
+
+        <div id="model-note" style="margin-top:var(--sp-3)"></div>
+      </div>
+
+      <aside class="side">
+        <div id="readout"></div>
+        <div style="margin-top:var(--sp-3)">
+          <span class="lbl" style="display:block;margin-bottom:var(--sp-2)">四组预设配置</span>
+          <div class="presets" id="presets"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     04 解法层
+     ===================================================================== -->
+<section class="layer shell" id="l04">
+  <span class="n">04 / 解法层</span>
+  <div class="lead">
+    <h2>分体式如何逐条绕开，以及代价</h2>
+    <p class="dek">四个约束，四个绕法，四项代价。这一节的重点在第三列——绕开约束不等于消除约束，只是把它转移到了别处。</p>
+  </div>
+
+  <p class="drop" style="margin-bottom:var(--sp-5)">分体式的核心思路可以用一句话概括：<strong>既然一个物体无法同时满足两套互相排斥的要求，那就用两个物体，各自只满足一套。</strong>这在工程上叫功能解耦，是处理需求冲突的标准手段。它的效果是真实的，但它的代价同样真实，而且代价往往不在工程参数里，而在用户体验和商业模型里。</p>
+
+  <div id="decouple"></div>
+
+  <div class="split" style="margin-top:var(--sp-5)">
+    <div>
+      <h3>解耦之后，这个产品实际上是什么</h3>
+      <p>把四项代价放在一起看，会得到一个与宣传材料相当不同的产品画像。陆行体承担了长距离位移（1000 公里以上续航）、补能（支持飞行体 5–6 次起降）、运载（把飞行器装进尾舱）和全部合法路权。飞行体承担的是一段 20 分钟、20 公里、昼间目视、不得商业载客的飞行。</p>
+      <p>于是分体式当前的真实产品形态是：<span class="hl">一辆续航 1000 公里的增程车，加一个放在后备箱里的娱乐飞行器。</span></p>
+      <p>这句话不是贬低。作为一件消费品它可能相当有吸引力，广州工厂的万台级产能和超 7000 台的订单也说明确实存在市场。但它与「飞行汽车将重构城市交通」这个叙事之间，有一道需要说明的距离。</p>
+    </div>
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd"><span class="lbl">功能分配一览</span></div>
+        <div class="ctrl-bd" id="alloc"></div>
+      </div>
+    </aside>
+  </div>
+
+  <figure class="fig" style="margin-top:var(--sp-5)">
+    <span class="tag">FIG 05</span>
+    <div id="fig05"></div>
+    <figcaption>
+      <span><b>FIG-05</b> 约束 → 绕法 → 代价 转移路径</span>
+      <span>约束未消除，只被转移</span>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- =====================================================================
+     05 证据层
+     ===================================================================== -->
+<section class="layer shell" id="l05">
+  <span class="n">05 / 证据层</span>
+  <div class="lead">
+    <h2>谁真的走到哪了</h2>
+    <p class="dek">宣称与进度之间有系统性落差。本节不引用任何企业的愿景描述，只看两类硬证据：取证状态和交付承诺的变更记录。</p>
+  </div>
+
+  <p class="drop">这个行业的信息环境有一个特点：发布会的信息量远大于进度公告的信息量。所以检验一个产品实际走到哪里，最可靠的方式是看它拿到了什么证，以及它的交付日期改过几次。</p>
+
+  <figure class="fig" style="margin-top:var(--sp-4)">
+    <span class="tag">FIG 06</span>
+    <div id="fig06"></div>
+    <figcaption>
+      <span><b>FIG-06</b> 四款产品的交付承诺变更记录</span>
+      <span>横轴为宣称的交付年份</span>
+    </figcaption>
+  </figure>
+
+  <div id="slips" style="margin-top:var(--sp-5)"></div>
+
+  <div class="split" style="margin-top:var(--sp-6)">
+    <div>
+      <h3>订单数字的含金量差两个量级</h3>
+      <p>各家公布的预订量经常被并列比较，但定金门槛相差极大。把门槛写在旁边，这些数字的可比性就消失了。</p>
+      <div id="orders"></div>
+      <p style="margin-top:var(--sp-3)">结论很直接：<strong>定金门槛决定了订单数字的信号强度。</strong>150 美元的定金与 1 万元人民币的意向金，在反映真实购买意愿上不是同一个量级的证据。而机构签约协议（如迪拜的 600 台）通常附带条件与分期，与零售订单性质不同，不宜直接相加。</p>
+    </div>
+    <aside class="side">
+      <div id="photo-alef"></div>
+      <p style="font-size:var(--step--1);color:var(--ink2);margin:var(--sp-2) 0 var(--sp-4)">
+        2022 年 10 月的发布会现场。四年之后，Alef 的首批交付日期从 2026 年底推到了 2027 年，
+        持有的仍是实验类特殊适航证。发布会的信息量与进度公告的信息量，在这个行业里从来不成比例。
+      </p>
+
+      <div class="ctrl">
+        <div class="ctrl-hd">
+          <span class="lbl">本节关键发现</span>
+          <span class="st st-warn">认知反转</span>
+        </div>
+        <div class="ctrl-bd">
+          <h4 style="margin:0 0 var(--sp-3)">拿到完整适航证的，全是彻底放弃路权的纯 eVTOL。</h4>
+          <div id="cert-compare"></div>
+          <p style="font-size:var(--step--1);color:var(--ink2);margin:var(--sp-3) 0 0;max-width:none">
+            所有两栖方案——无论一体还是分体——至今全部停留在实验类适航、专用条件审定中或待取证状态。
+            <span class="hl">越是放弃「车」这个身份，越早拿到合法飞行权。</span>
+            这个事实把问题推到了下一层：如果「车」的身份是取证路上的障碍，那它凭什么还留在产品定义里？
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 整页唯一一处 .reveal：真实照片序列，整组一起还原 -->
+  <h3 style="margin-top:var(--sp-6)">走到不同位置的四款产品</h3>
+  <p style="max-width:var(--measure)">按适航进度从右到左排列。最右边那台拿到了全套四证并在收费载客，而它是唯一一台完全放弃路权的。</p>
+  <div id="plate02" style="margin-top:var(--sp-4)"></div>
+</section>
+
+<!-- =====================================================================
+     06 场景层
+     ===================================================================== -->
+<section class="layer shell" id="l06">
+  <span class="n">06 / 场景层</span>
+  <div class="lead">
+    <h2>按场景反推形态</h2>
+    <p class="dek">不问「这台机器能做什么」，而问「这个场景需要什么」。换个方向之后，会发现一个让人不安的结论。</p>
+  </div>
+
+  <div class="split">
+    <div>
+      <p class="drop">前面三节都是从产品出发。这一节反过来：先列出低空出行真实存在的需求场景，再看哪种形态能满足它。</p>
+      <p>第一步要做的是把航程摊开对比。飞行汽车所有宣传材料里最吸引人的场景是城市通勤，而这恰好是对航程要求最明确的一个场景。</p>
+
+      <figure class="fig" style="margin-top:var(--sp-4)">
+        <span class="tag">FIG 07</span>
+        <div id="fig07"></div>
+        <figcaption>
+          <span><b>FIG-07</b> 航程对照：产品实际值 vs 实用化门槛 vs 场景需求</span>
+          <span>对数刻度</span>
+        </figcaption>
+      </figure>
+
+      <p style="margin-top:var(--sp-4)">X3-F 的单次航程是 20 公里，而一线城市跨区通勤的单程量级在 30 公里左右，张扬军给出的实用化门槛是 100 公里。<span class="hl">飞行体的航程不足以覆盖它最被期待的那个场景。</span></p>
+      <p>这不是产品设计失误，而是能量密度约束的直接后果。而真正值得注意的是下一步：当你把需求场景逐个列出来，会发现<strong>近期真正可落地的场景，几乎都不需要「车」这个身份。</strong></p>
+
+      <figure class="fig" style="margin-top:var(--sp-5)">
+        <span class="tag">FIG 08</span>
+        <div id="fig08"></div>
+        <figcaption>
+          <span><b>FIG-08</b> 场景 × 形态 适配度矩阵</span>
+          <span>五级标尺 · 点击场景查看判定理由</span>
+        </figcaption>
+      </figure>
+
+      <div id="scen-detail"></div>
+    </div>
+
+    <aside class="side">
+      <div class="ctrl" style="border-top-width:2px;border-top-color:var(--acc)">
+        <div class="ctrl-hd">
+          <span class="lbl" style="color:var(--acc-deep)">本节抛出的质疑</span>
+        </div>
+        <div class="ctrl-bd">
+          <p style="font-size:var(--step-1);font-family:var(--serif);line-height:1.5;margin:0 0 var(--sp-3);max-width:none">
+            应急救援、低空旅游、岛际摆渡、私人娱乐飞行——这四个近期最可落地的场景，<strong>没有一个需要这台机器能在马路上开。</strong>
+          </p>
+          <p style="font-size:var(--step--1);color:var(--ink2);margin:0;max-width:none">
+            它们需要的是固定起降点、短航程、明确的地理阻隔或明确的娱乐属性。路权在这些场景里不产生价值，却带来了全部的合规成本。
+          </p>
+          <p style="font-size:var(--step--1);color:var(--ink2);margin:var(--sp-3) 0 0;max-width:none">
+            第 05 层已经证明：放弃路权的纯 eVTOL 反而最早拿到了完整适航证并开始收费载客。
+          </p>
+          <p style="font-size:var(--step--1);margin:var(--sp-3) 0 0;max-width:none">
+            那么合起来看，一个尖锐的问题成立了：<span class="hl">既然绕开「车」能更快拿证，绕开「车」也不影响近期场景落地，为什么整个行业还要坚持叫它「飞行汽车」？</span>
+          </p>
+          <p style="font-size:var(--step--1);color:var(--ink3);margin:var(--sp-3) 0 0;max-width:none;font-family:var(--mono);line-height:1.6">
+            → 这个问题由第 07 层回答。
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =====================================================================
+     07 身份层
+     ===================================================================== -->
+<section class="layer shell" id="l07">
+  <span class="n">07 / 身份层</span>
+  <div class="lead">
+    <h2>那它凭什么还叫「飞行汽车」？</h2>
+    <p class="dek">上一节的质疑看起来很有力，但它建立在一个未经检验的假设上：「车」指的是轮子和路权。这个假设是错的。</p>
+  </div>
+
+  <p class="drop" style="margin-bottom:var(--sp-5)">绕开车又绕回车——这个直觉是对的，但它描述的不是矛盾，而是<strong>两个被混为一谈的维度在分别移动</strong>。行业绕开的是<strong>路权</strong>，绕回的是<strong>汽车属性</strong>。这两件事从来不是一回事——只是「飞行汽车」这个词把它们焊在了一起。本节用四步拆开这个词。</p>
+
+  <!-- 7.1 词源审计 -->
+  <h3>7.1　词源审计：这个词本来就不是技术术语</h3>
+  <p>英文世界有三个词，分工很清楚。混乱完全来自第三个。</p>
+  <div id="terms"></div>
+
+  <p style="margin-top:var(--sp-4)">工程界更偏好 roadable aircraft，因为它指明的是真实能力。而「flying car」是大众媒体标签，不是技术分类。它的词义漂移史本身就是一条完整的叙事线，每个节点都有原话可引。</p>
+
+  <div class="split" style="margin-top:var(--sp-4)">
+    <div>
+      <figure class="fig">
+        <span class="tag">FIG 09</span>
+        <div id="fig09"></div>
+        <figcaption>
+          <span><b>FIG-09</b> 「flying car」词义漂移 1917–2024</span>
+          <span>点击节点展开</span>
+        </figcaption>
+      </figure>
+      <div id="drift-detail"></div>
+    </div>
+    <aside class="side">
+      <span class="lbl" style="display:block;margin-bottom:var(--sp-2)">这个词最初指的东西</span>
+      <div id="photo-curtiss"></div>
+      <div id="photo-aerocar" style="margin-top:var(--sp-4)"></div>
+    </aside>
+  </div>
+
+  <div class="flag" style="margin-top:var(--sp-4)">
+    <span class="lbl">这一段的意义</span>
+    行业先抵制这个词七年（2017 年 Mark Moore 公开表态讨厌它，2020 年垂直飞行协会称它背负「一个世纪的包袱」），然后在 2024 年为了卖东西主动把它捡回来（Archer 把官网首页改成「Flying cars are landing in 2025」，理由是 eVTOL 对新手太拗口）。
+    <strong>这就是「绕回车」在话语层面的证据</strong>——而且它绕回的明显不是路权，Archer 的产品根本不能上路。
+  </div>
+
+  <!-- 7.2 中文定义 -->
+  <h3 style="margin-top:var(--sp-6)">7.2　中文学术定义：「车」指的不是轮子，是「大众化」</h3>
+  <p>这是解开整个疑问的钥匙。</p>
+  <div id="zyj"></div>
+
+  <!-- 7.3 双轴解耦 -->
+  <h3 style="margin-top:var(--sp-6)">7.3　双轴解耦：回扣第 01 层的坐标系</h3>
+  <p>现在可以给第 01 层那张图补上完整解释了。把「路权」和「汽车属性」拆成两根独立的轴之后，「绕开又绕回」就不再是矛盾。</p>
+
+  <div class="split" style="margin-top:var(--sp-4)">
+    <div>
+      <div id="axes"></div>
+      <p style="margin-top:var(--sp-4)"><strong>行业放弃的是轴 A（路权）</strong>，因为它意味着车规加适航的双重合规，而这两套法规的交集近乎为空。<strong>行业保留并强化的是轴 B（汽车属性）</strong>，因为这是万亿级市场想象的来源。</p>
+      <p>所以「绕开」和「绕回」绕的不是同一个东西。这不是自相矛盾，而是<span class="hl">一次相当精准的概念切割</span>——保留了有商业价值的那一半，丢掉了有合规成本的那一半。</p>
+    </div>
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd"><span class="lbl">「车」身份的三重含义</span></div>
+        <div class="ctrl-bd" id="carness"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 7.4 四条通道 -->
+  <h3 style="margin-top:var(--sp-6)">7.4　回归的四条通道</h3>
+  <p>「绕回汽车属性」不是一句修辞，它有四条具体的、可量化的通道。</p>
+
+  <div class="split" style="margin-top:var(--sp-4)">
+    <div>
+      <h4>通道一　供应链回归</h4>
+      <p>这是最硬的一条，因为它直接作用在成本上。</p>
+      <figure class="fig" style="margin-top:var(--sp-3)">
+        <span class="tag">FIG 10</span>
+        <div id="fig10"></div>
+        <figcaption>
+          <span><b>FIG-10</b> 汽车供应链复用率：理论上限 / 实际值 / 成本占比</span>
+          <span>各口径来源不同，见脚注</span>
+        </figcaption>
+      </figure>
+      <div id="reuse-detail"></div>
+    </div>
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd"><span class="lbl">复用的硬边界</span></div>
+        <div class="ctrl-bd" id="reuse-gap"></div>
+      </div>
+    </aside>
+  </div>
+
+  <h4 style="margin-top:var(--sp-5)">通道二　玩家回归</h4>
+  <p>造飞行汽车的主力是车企，不是航空企业。这个事实本身就在定义这个品类的属性。</p>
+  <div id="oems"></div>
+
+  <h4 style="margin-top:var(--sp-5)">通道三　产品定义回归</h4>
+  <p>座舱、人机交互、人体工学、智能座舱体验直接从汽车业移植。沃飞长空 AE200 的「智能灵动舱」是与汽车零部件供应商富维集团合作开发的；陆地航母的 270° 全景座舱和单杆操作，走的是汽车式的体验逻辑而不是航空仪表逻辑。这条通道不改变性能参数，但它决定了用户第一次坐进去时觉得这是什么东西。</p>
+
+  <h4 style="margin-top:var(--sp-5)">通道四　使用范式回归</h4>
+  <p>这是最深的一条，因为它决定了商业模式的分野。</p>
+  <div id="paradigm"></div>
+
+  <div class="flag" style="margin-top:var(--sp-4)">
+    <span class="lbl">注意这里的错位</span>
+    Pivotal Helix 和 Jetson ONE 完全没有路权，却在「拥有与使用方式」上比 Klein AirCar 更像汽车。
+    而亿航 EH216-S 四证齐备、技术最成熟，却在制度上与「汽车」毫无关联——它的运营合格证持证主体是两家运营公司，不是飞机本身，也不是任何个人。
+    <strong>这说明「像不像汽车」与「能不能上路」确实是两件独立的事。</strong>
+  </div>
+
+  <!-- 7.5 判别规则 -->
+  <h3 style="margin-top:var(--sp-6)">7.5　那怎么区分「飞行汽车」和「小型飞行器」？</h3>
+  <p><strong>诚实的答案：按物理形态区分不了，只能按监管身份加拥有运营方式区分。</strong></p>
+  <p>这不是搪塞，这是行业现实。决定一台机器法律身份的是三样东西——适航身份、运行身份、驾驶资质——而它们和这台机器长得像不像车毫无关系。</p>
+
+  <div id="part103" style="margin-top:var(--sp-4)"></div>
+
+  <div style="margin-top:var(--sp-5)">
+    <h4>交互判别器：自己走一遍流程</h4>
+    <p id="quiz-intro" style="max-width:var(--measure)"></p>
+    <div class="split" style="margin-top:var(--sp-4)">
+      <div><div class="quiz" id="quiz"></div></div>
+      <aside class="side"><div id="quiz-out"></div></aside>
+    </div>
+  </div>
+
+  <!-- 7.6 本层结论 -->
+  <div style="margin-top:var(--sp-6);border-top:2px solid var(--ink);padding-top:var(--sp-4)">
+    <span class="lbl">7.6　本层结论</span>
+    <p style="font:400 var(--step-3)/1.42 var(--serif);max-width:32em;margin:var(--sp-3) 0">
+      飞行汽车 ＝ <span class="hl">用汽车工业的方式制造、按汽车的方式拥有和使用的航空器。</span>
+    </p>
+    <p style="max-width:var(--measure)">「车」是产业方法论和消费定位，不是物理形态。这也解释了为什么小鹏把产品叫「陆地航母」而不叫 eVTOL，为什么 Archer 把官网改成「Flying cars are landing in 2025」——<strong>叫「车」是为了对标汽车市场的规模想象和消费者的心理账户</strong>，而不是为了描述它有几个轮子。</p>
+    <p style="max-width:var(--measure)">所以第 06 层那个质疑的答案是：「车」这个身份不多余，但它指的从来不是路权。行业绕开路权，是因为路权带来合规成本却不带来近期场景价值；行业绕回汽车属性，是因为汽车属性带来成本、产能、门槛和价位——而这四项恰好是「大众化」的全部前提。</p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     08 判断层
+     ===================================================================== -->
+<section class="layer shell" id="l08">
+  <span class="n">08 / 判断层</span>
+  <div class="lead">
+    <h2>回答开场那个问题</h2>
+    <p class="dek">车和飞机应该做成一体吗？分时间窗回答，并列出什么情况下本文的判断会失效。</p>
+  </div>
+
+  <p class="drop" style="margin-bottom:var(--sp-5)">把前七层的结论收拢：一体式面对四个互相耦合的硬约束，其中重量螺旋在当前电池能量密度下直接发散；分体式通过功能解耦规避了全部四个，代价是两套系统的冗余、换乘体验的断裂，以及一个被审定基础限定为「私人娱乐、不得商业载客」的飞行体。而「车」的身份之所以必须保留，是因为它承载的是成本、产能、门槛和价位这四项大众化前提，不是路权。</p>
+
+  <div id="windows"></div>
+
+  <div class="split" style="margin-top:var(--sp-6)">
+    <div>
+      <h3>证伪条件</h3>
+      <p>一个判断如果没有失效条件，它就不是判断而是态度。以下五条中任何一条成立，本文的核心结论就需要修正。</p>
+      <div id="falsify"></div>
+    </div>
+    <aside class="side">
+      <div class="ctrl" style="border-top-width:2px;border-top-color:var(--ink)">
+        <div class="ctrl-hd"><span class="lbl">收尾</span></div>
+        <div class="ctrl-bd">
+          <p style="font:400 var(--step-1)/1.5 var(--serif);margin:0 0 var(--sp-3);max-width:none">
+            分体式方案里，唯一真正是「车」的那个部分，恰恰是<strong>不飞</strong>的那个部分。
+          </p>
+          <p style="font-size:var(--step--1);color:var(--ink2);margin:0 0 var(--sp-3);max-width:none">
+            陆行体存在的理由是充电（支持飞行体 5–6 次飞行）、运载（把飞行器装进尾舱）、合法上路（三轴六轮、可进标准车位、C 照可驾驶、800V 增程、续航 1000 公里以上）。
+          </p>
+          <p style="font-size:var(--step--1);color:var(--ink2);margin:0 0 var(--sp-3);max-width:none">
+            也就是说，在分体式方案里，「车」被降级为<strong>基础设施</strong>——移动起降场、移动充电桩、移动机库。它不再是飞的那个主体，而是让飞变得可行的那套配套。
+          </p>
+          <p style="font-size:var(--step-0);margin:0;max-width:none">
+            这是「车」身份最彻底的一次功能化。<span class="hl">想要飞，就得先放弃让车飞。</span>
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =====================================================================
+     09 局限与反方
+     ===================================================================== -->
+<section class="layer shell" id="l09">
+  <span class="n">09 / 局限与反方</span>
+  <div class="lead">
+    <h2>一体式不可替代的地方，以及本文的边界</h2>
+    <p class="dek">前面八层都在论证分体式当前更合理。这一节说明这个论证在哪里可能是错的。</p>
+  </div>
+
+  <div class="split">
+    <div>
+      <h3>一体式的四项不可替代</h3>
+      <div id="counter"></div>
+    </div>
+    <aside class="side">
+      <div class="ctrl">
+        <div class="ctrl-hd"><span class="lbl">本文的数据局限</span></div>
+        <div class="ctrl-bd" id="limits"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer class="shell">
+  <span class="n">图片与视频来源</span>
+  <div id="credits" style="margin-bottom:var(--sp-5)"></div>
+
+  <span class="n">文献与资料来源</span>
+  <ol class="srcs" id="srcs"></ol>
+  <div class="foot-bar">
+    <span>换一种拆法 · 飞行汽车陆空功能分配架构的技术可行性与商业前景</span>
+    <span id="foot-ver"></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="app2.js"></script>
+</body>
+</html>
